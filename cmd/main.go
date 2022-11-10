@@ -5,6 +5,7 @@ import (
 	"github.com/IvanVojnic/cpGo.git/pkg/handler"
 	"github.com/IvanVojnic/cpGo.git/pkg/repository"
 	"github.com/IvanVojnic/cpGo.git/pkg/service"
+	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -17,7 +18,7 @@ func main() {
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
-		Username: viper.GetString("db.usaername"),
+		Username: viper.GetString("db.username"),
 		Password: viper.GetString("db.password"),
 		DBName:   viper.GetString("db.dbname"),
 		SSLMode:  viper.GetString("db.sslmode"),
@@ -39,6 +40,6 @@ func main() {
 
 func initConfig() error {
 	viper.AddConfigPath("configs")
-	viper.SetConfigName("configs")
+	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }
