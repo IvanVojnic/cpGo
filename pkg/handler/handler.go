@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/IvanVojnic/cpGo.git/pkg/service"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,7 @@ func NewHandler(services *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-
+	fmt.Println("init routes")
 	auth := router.Group("/auth")
 	{
 		auth.POST("/signup", h.signUp)

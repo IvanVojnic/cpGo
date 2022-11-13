@@ -27,9 +27,9 @@ func (h *Handler) signUp(c *gin.Context) {
 
 func (h *Handler) test(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"hui": "hui",
+		"b": "b",
 	})
-	fmt.Println("hui")
+	fmt.Println("b")
 }
 
 func (h *Handler) signIn(c *gin.Context) {
