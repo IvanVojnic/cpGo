@@ -8,6 +8,8 @@ import (
 
 func (h *Handler) signUp(c *gin.Context) {
 	fmt.Println("hello")
+
+	c.IndentedJSON(http.StatusOK, gin.H{"hello": "world"})
 	/*var input models.User
 
 	if err := c.BindJSON(&input); err != nil {
@@ -20,9 +22,9 @@ func (h *Handler) signUp(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}*/
-	c.JSON(http.StatusOK, map[string]interface{}{
+	/*	c.JSON(http.StatusOK, map[string]interface{}{
 		"aaa": "aaa",
-	})
+	})*/
 }
 
 func (h *Handler) test(c *gin.Context) {
