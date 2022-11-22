@@ -43,5 +43,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.GET("/test", h.test)
 		auth.GET("/private", h.isAuth)
 	}
+	userCommunicate := router.Group("")
+	{
+		//userCommunicate.POST("/getFriends", h.sendFriends)
+		userCommunicate.POST("/findFriend", h.findUser)
+		/*userCommunicate.POST("/sendRequest")
+		userCommunicate.POST("/getFriendsRequest")
+		userCommunicate.POST("/acceptFriendsRequest")
+		userCommunicate.POST("/sendInvite")*/
+	}
 	return router
 }

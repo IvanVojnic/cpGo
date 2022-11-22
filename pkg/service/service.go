@@ -11,12 +11,18 @@ type Authorization interface {
 	ParseToken(token string) (int, error)
 }
 
+type UserCommunicate interface {
+	FindUser(email string) (models.User, error)
+}
+
 type Service struct {
 	Authorization
+	UserCommunicate
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		Authorization: NewAuthService(repos.Authorization),
+		Authorization:   NewAuthService(repos.Authorization),
+		UserCommunicate: NewUserComm(repos.UserCommunicate),
 	}
 }
