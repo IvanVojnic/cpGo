@@ -41,6 +41,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/signup", h.signUp)
 		auth.POST("/login", h.signIn)
 		auth.GET("/test", h.test)
+		auth.GET("/private", h.isAuth)
 	}
 	return router
 }
