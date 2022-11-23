@@ -19,16 +19,12 @@ func (s *UserCommService) FindUser(email string) (models.User, error) {
 		return user, nil
 	}
 	return user, nil
-	/*user, err := s.repo.GetUser(email, generatePasswordHash(password))
+}
+
+func (s *UserCommService) SendRequest(userSender int, userReceiver int) error {
+	err := s.repo.SendRequestToFriends(userSender, userReceiver)
 	if err != nil {
-		return "", err
+		return nil
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(12 * time.Hour).Unix(),
-			IssuedAt:  time.Now().Unix(),
-		},
-		user.Id,
-	})
-	return token.SignedString([]byte(signingKey))*/
+	return err
 }

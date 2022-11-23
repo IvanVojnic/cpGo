@@ -13,6 +13,7 @@ type Authorization interface {
 
 type UserCommunicate interface {
 	FindUser(email string) (models.User, error)
+	SendRequest(userSender int, userReceiver int) error
 }
 
 type Service struct {

@@ -20,3 +20,13 @@ func (r *UserCommPostgres) FindUserByEmail(email string) (models.User, error) {
 	err := r.db.Get(&user, query, email)
 	return user, err
 }
+
+func (r *UserCommPostgres) SendRequestToFriends(userSender int, userReceiver int) error {
+	var friends models.Friends
+	query := fmt.Sprintf("INSERT INTO %s (userSender, userReceiver, status) values ($1, $2, $3)", friendsTable)
+	row := r.db.QueryRow(query, friends.UserSender, friends.UserReceiver, 1)
+	if err := row.Scan(&userSender); err != nil {
+		return err
+	}
+	return nil
+}

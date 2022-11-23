@@ -12,6 +12,7 @@ type Authorization interface {
 
 type UserCommunicate interface {
 	FindUserByEmail(email string) (models.User, error)
+	SendRequestToFriends(userSender int, userReceiver int) error
 }
 
 type Repository struct {
