@@ -44,3 +44,11 @@ func (s *UserCommService) AcceptFriendsRequest(userSender, userReceiver int) (st
 	}
 	return message, nil
 }
+
+func (s *UserCommService) GetAllFriends(userId int) ([]models.User, error) {
+	users, err := s.repo.GetAllFriends(userId)
+	if err != nil {
+		return users, err
+	}
+	return users, nil
+}

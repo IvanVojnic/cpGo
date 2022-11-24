@@ -20,6 +20,11 @@ type inputRequestFriend struct {
 	UserReceiver int    `json:"userReceiver"`
 }
 
+type inputAcceptRequest struct {
+	UserSender   int    `json:"userSender"`
+	UserReceiver string `json:"userReceiver"`
+}
+
 func (h *Handler) findUser(c *gin.Context) {
 	fmt.Println("findUser")
 
@@ -84,16 +89,16 @@ func (h *Handler) getFriendsRequest(c *gin.Context) {
 func (h *Handler) acceptFriendsRequest(c *gin.Context) {
 	fmt.Println("acceptFriendsRequest")
 
-	var input inputRequestFriend
+	var input inputAcceptRequest
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	var userSender int
-	userSender, _ = strconv.Atoi(input.UserSender)
+	var userReceiver int
+	userReceiver, _ = strconv.Atoi(input.UserReceiver)
 	fmt.Println(input.UserSender)
-	message, err := h.services.UserCommunicate.AcceptFriendsRequest(userSender, input.UserReceiver)
+	message, err := h.services.UserCommunicate.AcceptFriendsRequest(input.UserSender, userReceiver)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -101,20 +106,21 @@ func (h *Handler) acceptFriendsRequest(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, message)
 }
 
-/*func (h *Handler) sendFriends(c *gin.Context) {
+func (h *Handler) sendFriends(c *gin.Context) {
 	fmt.Println("signIn")
 
-	var input userToGet
+	var input userId
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	user, err := h.services.UserCommunicate
-	token, err := h.services.Authorization.GenerateToken(input.Email, input.Password)
+	var user_id int
+	user_id, _ = strconv.Atoi(input.Id)
+	friends, err := h.services.UserCommunicate.GetAllFriends(user_id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.IndentedJSON(http.StatusOK, gin.H{"token": token})
-}*/
+	c.IndentedJSON(http.StatusOK, friends)
+}

@@ -45,7 +45,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	}
 	userCommunicate := router.Group("")
 	{
-		//userCommunicate.POST("/getFriends", h.sendFriends)
+		userCommunicate.POST("/getFriends", h.sendFriends)
 		userCommunicate.POST("/findFriend", h.findUser)
 		userCommunicate.POST("/sendRequest", h.sendRequest)
 		userCommunicate.POST("/getFriendsRequest", h.getFriendsRequest)

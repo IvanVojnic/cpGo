@@ -46,11 +46,25 @@ func (r *UserCommPostgres) GetFriendsRequestById(userId int) ([]models.User, err
 }
 
 func (r *UserCommPostgres) AcceptFriendsRequest(userSender, userReceiver int) (string, error) {
-	query := fmt.Sprintf("UPDATE FRIENDS SET FRIENDS.status = 'friends' WHERE FRIENDS.userSender = $1 AND userReceiver = $2")
-	result, err := r.db.Exec(query, userSender, userReceiver)
+	query := fmt.Sprintf("UPDATE FRIENDS SET status = 'friends' WHERE user_sender = $1 AND user_receiver = $2")
+	_, err := r.db.Exec(query, userSender, userReceiver)
 	if err != nil {
 		return "error", err
 	}
-	fmt.Println(result)
 	return "accepted", nil
+}
+
+func (r *UserCommPostgres) GetAllFriends(userId int) ([]models.User, error) {
+	var users1 []models.User
+	query := fmt.Sprintf("SELECT USERS.id, USERS.email, USERS.name FROM USERS INNER JOIN FRIENDS on FRIENDS.user_receiver = USERS.id WHERE FRIENDS.user_sender = $1 AND FRIENDS.status = 'friends'")
+	err := r.db.Select(&users1, query, userId)
+	if err != nil {
+		fmt.Println(err)
+	}
+	var users2 []models.User
+	query2 := fmt.Sprintf("SELECT USERS.id, USERS.email, USERS.name FROM USERS INNER JOIN FRIENDS on FRIENDS.user_sender = USERS.id WHERE FRIENDS.user_receiver = $1 AND FRIENDS.status = 'friends'")
+	err2 := r.db.Select(&users2, query2, userId)
+	var allUsers []models.User
+	allUsers = append(users1, users2...)
+	return allUsers, err2
 }
