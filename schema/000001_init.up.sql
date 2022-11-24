@@ -8,8 +8,8 @@ CREATE TABLE users
 
 CREATE TABLE friends
 (
-    userSender   int references users (id) not null,
-    userReceiver int references users (id) not null,
+    user_sender   int references users (id) not null,
+    user_receiver int references users (id) not null,
     status       varchar(255)              not null
 );
 

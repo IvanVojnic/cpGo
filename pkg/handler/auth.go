@@ -60,7 +60,14 @@ func (h *Handler) signIn(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.IndentedJSON(http.StatusOK, gin.H{"token": token})
+	userId, err2 := h.services.Authorization.GetUser(input.Email, input.Password)
+
+	if err2 != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"token": token, "id": userId})
 }
 
 func (h *Handler) test(c *gin.Context) {

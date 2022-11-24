@@ -16,7 +16,7 @@ func NewUserComm(repo repository.UserCommunicate) *UserCommService {
 func (s *UserCommService) FindUser(email string) (models.User, error) {
 	user, err := s.repo.FindUserByEmail(email)
 	if err != nil {
-		return user, nil
+		return user, err
 	}
 	return user, nil
 }
@@ -27,4 +27,20 @@ func (s *UserCommService) SendRequest(userSender int, userReceiver int) error {
 		return nil
 	}
 	return err
+}
+
+func (s *UserCommService) GetFriendsRequest(userId int) ([]models.User, error) {
+	users, err := s.repo.GetFriendsRequestById(userId)
+	if err != nil {
+		return users, err
+	}
+	return users, nil
+}
+
+func (s *UserCommService) AcceptFriendsRequest(userSender, userReceiver int) (string, error) {
+	message, err := s.repo.AcceptFriendsRequest(userSender, userReceiver)
+	if err != nil {
+		return "error in accept", err
+	}
+	return message, nil
 }

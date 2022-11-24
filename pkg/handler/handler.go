@@ -48,9 +48,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		//userCommunicate.POST("/getFriends", h.sendFriends)
 		userCommunicate.POST("/findFriend", h.findUser)
 		userCommunicate.POST("/sendRequest", h.sendRequest)
-		/*userCommunicate.POST("/getFriendsRequest")
-		userCommunicate.POST("/acceptFriendsRequest")
-		userCommunicate.POST("/sendInvite")*/
+		userCommunicate.POST("/getFriendsRequest", h.getFriendsRequest)
+		userCommunicate.POST("/acceptFriendsRequest", h.acceptFriendsRequest)
+		/*userCommunicate.POST("/sendInvite")*/
 	}
 	return router
 }
