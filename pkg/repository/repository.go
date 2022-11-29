@@ -16,6 +16,7 @@ type UserCommunicate interface {
 	GetFriendsRequestById(userId int) ([]models.User, error)
 	AcceptFriendsRequest(userSender, userReceiver int) (string, error)
 	GetAllFriends(userId int) ([]models.User, error)
+	SendInvite(userSender int, friendsList []int) (string, error)
 }
 
 type Repository struct {

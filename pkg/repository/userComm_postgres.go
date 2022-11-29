@@ -68,3 +68,38 @@ func (r *UserCommPostgres) GetAllFriends(userId int) ([]models.User, error) {
 	allUsers = append(users1, users2...)
 	return allUsers, err2
 }
+
+func (r *UserCommPostgres) SendInvite(userSender int, friendsList []int) (string, error) {
+	var roomId int
+	queryRoom := fmt.Sprintf("INSERT INTO %s (idUserCreator, dateEvent, place) values ($1, $2, $3) RETURNING id", roomsTable)
+	rowRoom := r.db.QueryRow(queryRoom, userSender, "2022-10-10", "place")
+	if err := rowRoom.Scan(&roomId); err != nil {
+		return "error", err
+	}
+	fmt.Println("room id")
+	fmt.Println(roomId)
+	for i := 0; i < len(friendsList); i++ {
+		query := fmt.Sprintf("INSERT INTO %s (status_id, user_id, room_id) values ($1, $2, $3) RETURNING id", invitesTable)
+		row := r.db.QueryRow(query, 2, friendsList[i], roomId)
+		if err := row.Scan(&roomId); err != nil {
+			return "error invites", err
+		}
+	}
+	return "invite sends", nil
+}
+
+/*
+
+export const getRooms = async (req, res, next) => {
+    const userId = req.body.userId
+    await Rooms.findAll({
+        where: {
+            idUserCreator: userId
+        }, raw: true, attributes:["idUserCreator", "id", "date", "place"]
+    }).then(rooms => {
+        console.log(rooms)
+        return res.status(200).json(rooms);
+
+    })
+}
+*/

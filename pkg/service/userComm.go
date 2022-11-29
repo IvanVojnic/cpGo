@@ -52,3 +52,11 @@ func (s *UserCommService) GetAllFriends(userId int) ([]models.User, error) {
 	}
 	return users, nil
 }
+
+func (s *UserCommService) SendInvite(userSender int, friendsList []int) (string, error) {
+	message, err := s.repo.SendInvite(userSender, friendsList)
+	if err != nil {
+		return message, err
+	}
+	return message, nil
+}

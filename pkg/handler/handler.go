@@ -50,7 +50,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		userCommunicate.POST("/sendRequest", h.sendRequest)
 		userCommunicate.POST("/getFriendsRequest", h.getFriendsRequest)
 		userCommunicate.POST("/acceptFriendsRequest", h.acceptFriendsRequest)
-		/*userCommunicate.POST("/sendInvite")*/
+		userCommunicate.POST("/sendInvite", h.sendInvite)
 	}
 	return router
 }

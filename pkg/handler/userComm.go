@@ -15,6 +15,12 @@ type userId struct {
 	Id string `json:"id"`
 }
 
+type dataToInvite struct {
+	UserSender  int    `json:"userSender"`
+	FriendsList []int  `json:"friendsList"`
+	Place       string `json:"place"`
+}
+
 type inputRequestFriend struct {
 	UserSender   string `json:"userSender"`
 	UserReceiver int    `json:"userReceiver"`
@@ -39,7 +45,6 @@ func (h *Handler) findUser(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	fmt.Println(user)
 	c.IndentedJSON(http.StatusOK, gin.H{"email": user.Email, "name": user.Name, "id": user.Id})
 }
 
@@ -75,10 +80,7 @@ func (h *Handler) getFriendsRequest(c *gin.Context) {
 	}
 	var user_id int
 	user_id, _ = strconv.Atoi(input.Id)
-	fmt.Println(input.Id)
 	users, err := h.services.UserCommunicate.GetFriendsRequest(user_id)
-	fmt.Println("_______________")
-	fmt.Println(users)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -97,7 +99,6 @@ func (h *Handler) acceptFriendsRequest(c *gin.Context) {
 	}
 	var userReceiver int
 	userReceiver, _ = strconv.Atoi(input.UserReceiver)
-	fmt.Println(input.UserSender)
 	message, err := h.services.UserCommunicate.AcceptFriendsRequest(input.UserSender, userReceiver)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -107,7 +108,7 @@ func (h *Handler) acceptFriendsRequest(c *gin.Context) {
 }
 
 func (h *Handler) sendFriends(c *gin.Context) {
-	fmt.Println("signIn")
+	fmt.Println("sendFriends")
 
 	var input userId
 
@@ -123,4 +124,25 @@ func (h *Handler) sendFriends(c *gin.Context) {
 		return
 	}
 	c.IndentedJSON(http.StatusOK, friends)
+}
+
+func (h *Handler) sendInvite(c *gin.Context) {
+	fmt.Println("sendInvite")
+
+	var input dataToInvite
+
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	fmt.Println(c.Request)
+	fmt.Println(input.UserSender)
+	fmt.Println("____________")
+	fmt.Println(input.FriendsList)
+	message, err := h.services.UserCommunicate.SendInvite(input.UserSender, input.FriendsList)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.IndentedJSON(http.StatusOK, message)
 }
