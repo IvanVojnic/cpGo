@@ -31,6 +31,10 @@ type inputAcceptRequest struct {
 	UserReceiver string `json:"userReceiver"`
 }
 
+type getRoomByUserId struct {
+	Id string `json:"userId"`
+}
+
 func (h *Handler) findUser(c *gin.Context) {
 	fmt.Println("findUser")
 
@@ -135,14 +139,30 @@ func (h *Handler) sendInvite(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	fmt.Println(c.Request)
-	fmt.Println(input.UserSender)
-	fmt.Println("____________")
-	fmt.Println(input.FriendsList)
 	message, err := h.services.UserCommunicate.SendInvite(input.UserSender, input.FriendsList)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.IndentedJSON(http.StatusOK, message)
+}
+
+func (h *Handler) getRooms(c *gin.Context) {
+	fmt.Println("getRooms")
+
+	var input getRoomByUserId
+
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	fmt.Println(input.Id)
+	var user_id int
+	user_id, _ = strconv.Atoi(input.Id)
+	rooms, err := h.services.UserCommunicate.GetRooms(user_id)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.IndentedJSON(http.StatusOK, rooms)
 }

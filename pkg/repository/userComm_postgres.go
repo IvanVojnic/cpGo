@@ -71,7 +71,7 @@ func (r *UserCommPostgres) GetAllFriends(userId int) ([]models.User, error) {
 
 func (r *UserCommPostgres) SendInvite(userSender int, friendsList []int) (string, error) {
 	var roomId int
-	queryRoom := fmt.Sprintf("INSERT INTO %s (idUserCreator, dateEvent, place) values ($1, $2, $3) RETURNING id", roomsTable)
+	queryRoom := fmt.Sprintf("INSERT INTO %s (id_user_creator, date_event, place) values ($1, $2, $3) RETURNING id", roomsTable)
 	rowRoom := r.db.QueryRow(queryRoom, userSender, "2022-10-10", "place")
 	if err := rowRoom.Scan(&roomId); err != nil {
 		return "error", err
@@ -88,18 +88,27 @@ func (r *UserCommPostgres) SendInvite(userSender int, friendsList []int) (string
 	return "invite sends", nil
 }
 
-/*
-
-export const getRooms = async (req, res, next) => {
-    const userId = req.body.userId
-    await Rooms.findAll({
-        where: {
-            idUserCreator: userId
-        }, raw: true, attributes:["idUserCreator", "id", "date", "place"]
-    }).then(rooms => {
-        console.log(rooms)
-        return res.status(200).json(rooms);
-
-    })
+func (r *UserCommPostgres) GetRooms(userId int) ([]models.Rooms, error) {
+	fmt.Println("getRooms 2")
+	fmt.Println(userId)
+	var rooms1 []models.Rooms
+	//query1 := fmt.Sprintf("SELECT ROOMS.id, ROOMS.id_user_creator, ROOMS.place FROM ROOMS WHERE ROOMS.id_user_creator = $1")
+	query1 := fmt.Sprintf("SELECT id, id_user_creator, date_event, place FROM %s WHERE id_user_creator=$1", roomsTable)
+	err1 := r.db.Select(&rooms1, query1, userId)
+	if err1 != nil {
+		fmt.Println(err1)
+	}
+	fmt.Println("getRooms 3")
+	fmt.Println(rooms1)
+	var rooms2 []models.Rooms
+	query2 := fmt.Sprintf("SELECT ROOMS.id, ROOMS.id_user_creator, ROOMS.date_event, ROOMS.place FROM ROOMS INNER JOIN INVITES on INVITES.room_id = ROOMS.id WHERE INVITES.user_id = $1")
+	err2 := r.db.Select(&rooms2, query2, userId)
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+	fmt.Println("getRooms 4")
+	fmt.Println(rooms2)
+	var allRooms []models.Rooms
+	allRooms = append(rooms1, rooms2...)
+	return allRooms, nil
 }
-*/

@@ -60,3 +60,11 @@ func (s *UserCommService) SendInvite(userSender int, friendsList []int) (string,
 	}
 	return message, nil
 }
+
+func (s *UserCommService) GetRooms(userId int) ([]models.Rooms, error) {
+	rooms, err := s.repo.GetRooms(userId)
+	if err != nil {
+		return rooms, err
+	}
+	return rooms, nil
+}
