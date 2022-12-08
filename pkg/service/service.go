@@ -18,7 +18,7 @@ type UserCommunicate interface {
 	GetFriendsRequest(userId int) ([]models.User, error)
 	AcceptFriendsRequest(userSender, userReceiver int) (string, error)
 	GetAllFriends(userId int) ([]models.User, error)
-	SendInvite(userSender int, friendsList []int) (string, error)
+	SendInvite(userSender int, friendsList []int, id_place int) (string, error)
 	GetRooms(userId int) ([]models.Rooms, error)
 }
 

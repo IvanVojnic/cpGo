@@ -18,7 +18,7 @@ CREATE TABLE rooms
     id              serial                    not null unique,
     id_user_creator int references users (id) not null,
     date_event      date,
-    place           varchar(255)
+    id_place           int
 );
 
 CREATE TABLE statuses

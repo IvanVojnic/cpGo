@@ -16,9 +16,9 @@ type userId struct {
 }
 
 type dataToInvite struct {
-	UserSender  int    `json:"userSender"`
-	FriendsList []int  `json:"friendsList"`
-	Place       string `json:"place"`
+	UserSender  int   `json:"userSender"`
+	FriendsList []int `json:"friendsList"`
+	Id_place    int   `json:"id_place"`
 }
 
 type inputRequestFriend struct {
@@ -139,7 +139,7 @@ func (h *Handler) sendInvite(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	message, err := h.services.UserCommunicate.SendInvite(input.UserSender, input.FriendsList)
+	message, err := h.services.UserCommunicate.SendInvite(input.UserSender, input.FriendsList, input.Id_place)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -164,5 +164,6 @@ func (h *Handler) getRooms(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, rooms)
 }

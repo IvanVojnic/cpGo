@@ -11,6 +11,35 @@ import (
 )
 
 func main() {
+	/*conn, _ := kafka.DialLeader(context.Background(), "tcp", "localhost", "quickstart-events", 0)
+	conn.SetReadDeadline(time.Now().Add(time.Second * 20))
+	message, _ := conn.ReadMessage(1e6)
+	fmt.Println(message.Value)*/
+	/*reader := kafka.NewKafkaReader()
+	writer := kafka.NewKafkaWriter()
+
+	ctx := context.Background()
+	messages := make(chan kafkago.Message, 1000)
+	messageCommitChan := make(chan kafkago.Message, 1000)
+
+	g, ctx := errgroup.WithContext(ctx)
+
+	g.Go(func() (string, error) {
+		return reader.FetchMessage(ctx, messages)
+	})
+
+	g.Go(func() error {
+		return writer.WriteMessages(ctx, messages, messageCommitChan)
+	})
+
+	g.Go(func() error {
+		return reader.CommitMessages(ctx, messageCommitChan)
+	})
+
+	err := g.Wait()
+	if err != nil {
+		log.Fatalln(err)
+	}*/
 	if err := initConfig(); err != nil {
 		log.Fatalf("error init config", err.Error())
 	}
